@@ -4,32 +4,39 @@ class Program
 {
     static void Main(string[] args)
     {
-        ScriptureLibrary library = new ScriptureLibrary();
-        library.LoadDefaultScriptures(); 
-
-        Scripture selectedScripture = library.GetRandomScripture();
-        
-        while (!selectedScripture.AllWordsHidden())
+        try
         {
-            Console.Clear();
-            Console.WriteLine(selectedScripture.Display());
-            Console.WriteLine("\nPress Enter to hide a word, or type 'quit' to exit:");
+            ScriptureLibrary library = new ScriptureLibrary();
+            library.LoadDefaultScriptures(); 
+
+            Scripture selectedScripture = library.GetRandomScripture();
             
-            string input = Console.ReadLine();
-            
-            if (input.ToLower() == "quit")
+            while (!selectedScripture.AllWordsHidden())
             {
-                break;
+                Console.Clear();
+                Console.WriteLine(selectedScripture.Display());
+                Console.WriteLine("\nPress Enter to hide a word, or type 'quit' to exit:");
+                
+                string input = Console.ReadLine() ?? "";
+                
+                if (input.ToLower() == "quit")
+                {
+                    break;
+                }
+                
+                selectedScripture.HideRandomWord();
             }
             
-            selectedScripture.HideRandomWord();
+            if (selectedScripture.AllWordsHidden())
+            {
+                Console.Clear();
+                Console.WriteLine(selectedScripture.Display());
+                Console.WriteLine("\nCongratulations! You've memorized the scripture!");
+            }
         }
-        
-        if (selectedScripture.AllWordsHidden())
+        catch (Exception ex)
         {
-            Console.Clear();
-            Console.WriteLine(selectedScripture.Display());
-            Console.WriteLine("\nCongratulations! You've memorized the scripture!");
+            Console.WriteLine($"Error: {ex.Message}");
         }
     }
 }
